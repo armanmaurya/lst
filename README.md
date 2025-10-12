@@ -16,6 +16,14 @@ A fast, colorful CLI tool for listing directories, inspired by `tree` and design
 
 ## Installation
 
+### Quick Install (Windows)
+
+```powershell
+iwr -useb https://raw.githubusercontent.com/armanmaurya/nva/main/scripts/install.ps1 | iex
+```
+
+### From Source
+
 ```
 cargo install --path .
 ```
@@ -30,13 +38,29 @@ cargo build --release
 
 ### Windows (Download latest release automatically)
 
-Use the provided PowerShell installer to download the latest release from GitHub and add it to your PATH:
+#### Remote Installation (Recommended)
 
+Run the installer directly from GitHub without cloning the repository:
+
+```powershell
+iwr -useb https://raw.githubusercontent.com/armanmaurya/nva/main/scripts/install.ps1 | iex
 ```
+
+Or with options:
+
+```powershell
+& ([scriptblock]::Create((iwr -useb https://raw.githubusercontent.com/armanmaurya/nva/main/scripts/install.ps1))) -Force
+```
+
+#### Local Installation
+
+If you have already cloned the repository, you can run the installer locally:
+
+```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1
 ```
 
-Options:
+#### Options:
 - Override install directory: `-InstallDir "$env:LOCALAPPDATA\nva\bin"`
 - Force overwrite existing: `-Force`
 
