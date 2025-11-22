@@ -1,5 +1,15 @@
 # Requires: Windows PowerShell 5.1+ or PowerShell 7+
-# Purpose: Install the latest lst Windows release to a user-local bin and add it to PATH.
+# Purpose: Install the latest nva Windows release to a user-local bin and add it to PATH.
+#
+# Usage (Remote):
+#   iwr -useb https://raw.githubusercontent.com/armanmaurya/nva/main/scripts/install.ps1 | iex
+#   Or with options:
+#   & ([scriptblock]::Create((iwr -useb https://raw.githubusercontent.com/armanmaurya/nva/main/scripts/install.ps1))) -Force
+#
+# Usage (Local):
+#   powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1
+#   Or:
+#   .\scripts\install.ps1 -Force -InstallDir "C:\custom\path"
 
 [CmdletBinding()]
 param(
