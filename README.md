@@ -1,4 +1,4 @@
-# nva
+# lst
 
 A fast, colorful CLI tool for listing directories, inspired by `tree` and designed for developers who live in the terminal.
 
@@ -23,8 +23,8 @@ cargo install --path .
 Or clone and build manually:
 
 ```
-git clone https://github.com/armanmaurya/nva.git
-cd nva
+git clone https://github.com/armanmaurya/lst.git
+cd lst
 cargo build --release
 ```
 
@@ -37,7 +37,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1
 ```
 
 Options:
-- Override install directory: `-InstallDir "$env:LOCALAPPDATA\nva\bin"`
+- Override install directory: `-InstallDir "$env:LOCALAPPDATA\lst\bin"`
 - Force overwrite existing: `-Force`
 
 ### Uninstall (Windows)
@@ -54,7 +54,7 @@ Options:
 ## Usage
 
 ```
-nva <PATH|FILE> [OPTIONS]
+lst <PATH|FILE> [OPTIONS]
 ```
 
 - If `<PATH>` is a directory, prints the directory tree.
@@ -67,13 +67,12 @@ nva <PATH|FILE> [OPTIONS]
 - `-d, --depth <DEPTH>` : Max depth of traversal (default: 1, use 0 for unlimited)
 - `--find <PATTERN>` : Search for files or directories by name (case-insensitive)
 - `-o, --output <FILE>` : Export the tree to a file (plain text, no color)
-- `--reverse` : Output in reverse order
 
 ### Examples
 
 List the directory tree up to 2 levels deep:
 ```
-nva . -d 2
+lst . -d 2
 ```
 
 Output:
@@ -88,17 +87,17 @@ Output:
 
 Search for all files and directories containing "main":
 ```
-nva . --find main
+lst . --find main
 ```
 
 Export the tree to a file (no color):
 ```
-nva . --output tree.txt
+lst . --output tree.txt
 ```
 
 Print a file with syntax highlighting:
 ```
-nva src/main.rs
+lst src/main.rs
 ```
 
 ## License

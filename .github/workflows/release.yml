@@ -34,7 +34,7 @@ jobs:
       - name: Prepare .deb artifact
         run: |
           mkdir -p dist
-          cp target/x86_64-unknown-linux-gnu/debian/*.deb dist/nva_${{ steps.extract.outputs.version }}_amd64.deb
+          cp target/x86_64-unknown-linux-gnu/debian/*.deb dist/lst_${{ steps.extract.outputs.version }}_amd64.deb
 
       - name: Upload .deb
         uses: actions/upload-artifact@v4
@@ -64,9 +64,9 @@ jobs:
       - name: Prepare .zip artifact
         run: |
           mkdir -p dist
-          cp target/x86_64-pc-windows-gnu/release/nva.exe dist/
-          cd dist && zip nva_${{ steps.extract.outputs.version }}_x86_64-pc-windows-gnu.zip nva.exe
-          rm nva.exe
+          cp target/x86_64-pc-windows-gnu/release/lst.exe dist/
+          cd dist && zip lst_${{ steps.extract.outputs.version }}_x86_64-pc-windows-gnu.zip lst.exe
+          rm lst.exe
 
       - name: Upload .zip
         uses: actions/upload-artifact@v4

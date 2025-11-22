@@ -1,9 +1,9 @@
 # Requires: Windows PowerShell 5.1+ or PowerShell 7+
-# Purpose: Uninstall nva from a user-local bin and optionally remove it from PATH.
+# Purpose: Uninstall lst from a user-local bin and optionally remove it from PATH.
 
 [CmdletBinding()]
 param(
-  [string]$InstallDir = "$env:LOCALAPPDATA\nva\bin",
+  [string]$InstallDir = "$env:LOCALAPPDATA\lst\bin",
   [switch]$RemoveFromPath,
   [switch]$Force,
   [switch]$Purge
@@ -37,9 +37,9 @@ function Remove-FromUserPath {
 }
 
 try {
-  $exePath = Join-Path $InstallDir 'nva.exe'
+  $exePath = Join-Path $InstallDir 'lst.exe'
   if (-not (Test-Path -LiteralPath $exePath)) {
-    Write-Warn "nva.exe not found at: $exePath"
+    Write-Warn "lst.exe not found at: $exePath"
   } else {
     if (-not $Force) {
       $ans = Read-Host "Remove $exePath ? (y/N)"
@@ -59,7 +59,7 @@ try {
   }
 
   if ($Purge) {
-    # Attempt to remove empty install dir and parent nva folder if empty
+    # Attempt to remove empty install dir and parent lst folder if empty
     foreach ($dir in @($InstallDir, (Split-Path $InstallDir -Parent))) {
       if ($dir -and (Test-Path -LiteralPath $dir)) {
         try {

@@ -1,10 +1,10 @@
 # Requires: Windows PowerShell 5.1+ or PowerShell 7+
-# Purpose: Install the latest nva Windows release to a user-local bin and add it to PATH.
+# Purpose: Install the latest lst Windows release to a user-local bin and add it to PATH.
 
 [CmdletBinding()]
 param(
-  [string]$Repo = 'armanmaurya/nva',
-  [string]$InstallDir = "$env:LOCALAPPDATA\nva\bin",
+  [string]$Repo = 'armanmaurya/lst',
+  [string]$InstallDir = "$env:LOCALAPPDATA\lst\bin",
   [switch]$Force
 )
 
@@ -73,10 +73,10 @@ function Install-FromZip {
   Ensure-Dir $extractDir
   Write-Info "Extracting archive..."
   Expand-Archive -Path $ZipPath -DestinationPath $extractDir -Force
-  $exe = Get-ChildItem -Path $extractDir -Recurse -Filter 'nva.exe' | Select-Object -First 1
-  if (-not $exe) { throw "nva.exe not found in the extracted archive." }
+  $exe = Get-ChildItem -Path $extractDir -Recurse -Filter 'lst.exe' | Select-Object -First 1
+  if (-not $exe) { throw "lst.exe not found in the extracted archive." }
   Ensure-Dir $InstallDir
-  $destExe = Join-Path $InstallDir 'nva.exe'
+  $destExe = Join-Path $InstallDir 'lst.exe'
   Copy-Item -Path $exe.FullName -Destination $destExe -Force
   $destExe
 }
@@ -87,7 +87,7 @@ function Install-FromExeAsset {
     [Parameter(Mandatory)][string]$InstallDir
   )
   Ensure-Dir $InstallDir
-  $destExe = Join-Path $InstallDir 'nva.exe'
+  $destExe = Join-Path $InstallDir 'lst.exe'
   Copy-Item -Path $ExePath -Destination $destExe -Force
   $destExe
 }
@@ -97,12 +97,12 @@ try {
   Write-Info "Latest release: $($asset.Version)"
   Write-Info "Asset: $($asset.Name)"
 
-  $tmpDir = Join-Path $env:TEMP ("nva-install-" + [Guid]::NewGuid().ToString('N'))
+  $tmpDir = Join-Path $env:TEMP ("lst-install-" + [Guid]::NewGuid().ToString('N'))
   Ensure-Dir $tmpDir
   $downloadPath = Join-Path $tmpDir $asset.Name
 
-  if ((Test-Path $InstallDir) -and (Test-Path (Join-Path $InstallDir 'nva.exe')) -and -not $Force) {
-    Write-Host "nva is already installed at: $(Join-Path $InstallDir 'nva.exe')"
+  if ((Test-Path $InstallDir) -and (Test-Path (Join-Path $InstallDir 'lst.exe')) -and -not $Force) {
+    Write-Host "lst is already installed at: $(Join-Path $InstallDir 'lst.exe')"
     $choice = Read-Host "Overwrite existing file? (y/N)"
     if ($choice -notin @('y','Y')) { throw "Installation aborted by user." }
   }
@@ -118,7 +118,7 @@ try {
 
   Add-ToUserPath -Dir $InstallDir
   Write-Host "Installed: $installedExe" -ForegroundColor Green
-  Write-Host "Open a new terminal and run: nva --help" -ForegroundColor Green
+  Write-Host "Open a new terminal and run: lst --help" -ForegroundColor Green
 }
 catch {
   Write-Error ($_.Exception.Message)
