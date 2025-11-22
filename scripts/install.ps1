@@ -1,10 +1,10 @@
 # Requires: Windows PowerShell 5.1+ or PowerShell 7+
-# Purpose: Install the latest nva Windows release to a user-local bin and add it to PATH.
+# Purpose: Install the latest lst Windows release to a user-local bin and add it to PATH.
 #
 # Usage (Remote):
-#   iwr -useb https://raw.githubusercontent.com/armanmaurya/nva/main/scripts/install.ps1 | iex
+#   iwr -useb https://raw.githubusercontent.com/armanmaurya/lst/main/scripts/install.ps1 | iex
 #   Or with options:
-#   & ([scriptblock]::Create((iwr -useb https://raw.githubusercontent.com/armanmaurya/nva/main/scripts/install.ps1))) -Force
+#   & ([scriptblock]::Create((iwr -useb https://raw.githubusercontent.com/armanmaurya/lst/main/scripts/install.ps1))) -Force
 #
 # Usage (Local):
 #   powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1
@@ -50,7 +50,7 @@ function Add-ToUserPath {
 function Get-LatestReleaseAsset {
   param([Parameter(Mandatory)][string]$Repo)
   $uri = "https://api.github.com/repos/$Repo/releases/latest"
-  $headers = @{ 'User-Agent' = 'nva-installer'; 'Accept' = 'application/vnd.github+json' }
+  $headers = @{ 'User-Agent' = 'lst-installer'; 'Accept' = 'application/vnd.github+json' }
   Write-Verbose "Fetching latest release JSON: $uri"
   $release = Invoke-RestMethod -Uri $uri -Headers $headers -Method GET
   if (-not $release.assets) { throw "No assets found in the latest release." }

@@ -19,7 +19,7 @@ A fast, colorful CLI tool for listing directories, inspired by `tree` and design
 ### Quick Install (Windows)
 
 ```powershell
-iwr -useb https://raw.githubusercontent.com/armanmaurya/nva/main/scripts/install.ps1 | iex
+iwr -useb https://raw.githubusercontent.com/armanmaurya/lst/main/scripts/install.ps1 | iex
 ```
 
 ### From Source
@@ -43,13 +43,13 @@ cargo build --release
 Run the installer directly from GitHub without cloning the repository:
 
 ```powershell
-iwr -useb https://raw.githubusercontent.com/armanmaurya/nva/main/scripts/install.ps1 | iex
+iwr -useb https://raw.githubusercontent.com/armanmaurya/lst/main/scripts/install.ps1 | iex
 ```
 
 Or with options:
 
 ```powershell
-& ([scriptblock]::Create((iwr -useb https://raw.githubusercontent.com/armanmaurya/nva/main/scripts/install.ps1))) -Force
+& ([scriptblock]::Create((iwr -useb https://raw.githubusercontent.com/armanmaurya/lst/main/scripts/install.ps1))) -Force
 ```
 
 #### Local Installation
