@@ -1,6 +1,10 @@
 use std::collections::HashSet;
 use std::path::PathBuf;
 use walkdir::DirEntry;
+use super::filters::is_hidden;
+use rayon::prelude::*;
+use dashmap::DashSet;
+use aho_corasick::AhoCorasick;
 
 /// Build a set of directories that should be shown based on search pattern
 /// 
@@ -10,24 +14,34 @@ use walkdir::DirEntry;
 pub fn build_search_filter(
     entries: &[DirEntry],
     pattern: &str,
+    show_hidden: bool,
 ) -> HashSet<PathBuf> {
-    let mut show_dirs = HashSet::new();
-    let pattern_lower = pattern.to_lowercase();
+    // Lowercase pattern once using ASCII for speed; build fast matcher
+    let pattern_lower = pattern.to_ascii_lowercase();
+    let matcher = AhoCorasick::new([pattern_lower.clone()]).expect("failed to build matcher");
 
-    for entry in entries {
-        let name = entry.file_name().to_string_lossy().to_lowercase();
-        
-        if name.contains(&pattern_lower) {
-            // Add all parent directories of this match
+    // Concurrent set to collect parent directories without intermediate Vecs
+    let show_dirs = DashSet::new();
+
+    entries.par_iter().for_each(|entry| {
+        // Skip hidden directories entirely when searching, unless explicitly showing hidden
+        if entry.file_type().is_dir() && !show_hidden && is_hidden(entry) {
+            return;
+        }
+        let name = entry.file_name().to_string_lossy();
+        let name_lc = name.to_ascii_lowercase();
+        if matcher.is_match(&name_lc) {
+            // Insert parent chain directly into concurrent set
             let mut path = entry.path();
             while let Some(parent) = path.parent() {
                 show_dirs.insert(parent.to_path_buf());
                 path = parent;
             }
         }
-    }
+    });
 
-    show_dirs
+    // Convert to HashSet for downstream usage
+    show_dirs.into_iter().collect()
 }
 
 /// Check if an entry should be printed based on search criteria
@@ -35,12 +49,18 @@ pub fn should_print_entry(
     entry: &DirEntry,
     search_pattern: Option<&str>,
     show_dirs: &HashSet<PathBuf>,
+    show_hidden: bool,
 ) -> bool {
     match search_pattern {
         Some(pattern) => {
-            let name = entry.file_name().to_string_lossy().to_lowercase();
-            let pattern_lower = pattern.to_lowercase();
-            name.contains(&pattern_lower) || show_dirs.contains(entry.path())
+            // Do not print hidden directories while searching unless overridden
+            if entry.file_type().is_dir() && !show_hidden && is_hidden(entry) {
+                return false;
+            }
+            let name = entry.file_name().to_string_lossy();
+            let name_lc = name.to_ascii_lowercase();
+            let pattern_lower = pattern.to_ascii_lowercase();
+            name_lc.contains(&pattern_lower) || show_dirs.contains(entry.path())
         }
         None => true,
     }

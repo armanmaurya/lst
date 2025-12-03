@@ -1,0 +1,217 @@
+{
+  "children": [
+    {
+      "name": "Cargo.lock",
+      "path": ".\\Cargo.lock",
+      "size": 21700,
+      "type": "file"
+    },
+    {
+      "name": "Cargo.toml",
+      "path": ".\\Cargo.toml",
+      "size": 696,
+      "type": "file"
+    },
+    {
+      "name": "LICENSE",
+      "path": ".\\LICENSE",
+      "size": 1069,
+      "type": "file"
+    },
+    {
+      "name": "README.md",
+      "path": ".\\README.md",
+      "size": 3143,
+      "type": "file"
+    },
+    {
+      "children": [
+        {
+          "name": "install.ps1",
+          "path": ".\\scripts\\install.ps1",
+          "size": 5348,
+          "type": "file"
+        },
+        {
+          "name": "uninstall.ps1",
+          "path": ".\\scripts\\uninstall.ps1",
+          "size": 2695,
+          "type": "file"
+        }
+      ],
+      "name": "scripts",
+      "path": ".\\scripts",
+      "type": "directory"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "name": "args.rs",
+              "path": ".\\src\\cli\\args.rs",
+              "size": 1389,
+              "type": "file"
+            },
+            {
+              "name": "mod.rs",
+              "path": ".\\src\\cli\\mod.rs",
+              "size": 80,
+              "type": "file"
+            },
+            {
+              "name": "parser.rs",
+              "path": ".\\src\\cli\\parser.rs",
+              "size": 877,
+              "type": "file"
+            }
+          ],
+          "name": "cli",
+          "path": ".\\src\\cli",
+          "type": "directory"
+        },
+        {
+          "children": [
+            {
+              "name": "list.rs",
+              "path": ".\\src\\commands\\list.rs",
+              "size": 1046,
+              "type": "file"
+            },
+            {
+              "name": "mod.rs",
+              "path": ".\\src\\commands\\mod.rs",
+              "size": 32,
+              "type": "file"
+            },
+            {
+              "name": "search.rs",
+              "path": ".\\src\\commands\\search.rs",
+              "size": 1939,
+              "type": "file"
+            }
+          ],
+          "name": "commands",
+          "path": ".\\src\\commands",
+          "type": "directory"
+        },
+        {
+          "children": [
+            {
+              "name": "filters.rs",
+              "path": ".\\src\\core\\filters.rs",
+              "size": 1944,
+              "type": "file"
+            },
+            {
+              "name": "mod.rs",
+              "path": ".\\src\\core\\mod.rs",
+              "size": 50,
+              "type": "file"
+            },
+            {
+              "name": "search.rs",
+              "path": ".\\src\\core\\search.rs",
+              "size": 2440,
+              "type": "file"
+            },
+            {
+              "name": "tree.rs",
+              "path": ".\\src\\core\\tree.rs",
+              "size": 506,
+              "type": "file"
+            }
+          ],
+          "name": "core",
+          "path": ".\\src\\core",
+          "type": "directory"
+        },
+        {
+          "name": "error.rs",
+          "path": ".\\src\\error.rs",
+          "size": 1288,
+          "type": "file"
+        },
+        {
+          "name": "lib.rs",
+          "path": ".\\src\\lib.rs",
+          "size": 106,
+          "type": "file"
+        },
+        {
+          "name": "main.rs",
+          "path": ".\\src\\main.rs",
+          "size": 190,
+          "type": "file"
+        },
+        {
+          "children": [
+            {
+              "name": "formatter.rs",
+              "path": ".\\src\\output\\formatter.rs",
+              "size": 4185,
+              "type": "file"
+            },
+            {
+              "name": "highlight.rs",
+              "path": ".\\src\\output\\highlight.rs",
+              "size": 2389,
+              "type": "file"
+            },
+            {
+              "name": "mod.rs",
+              "path": ".\\src\\output\\mod.rs",
+              "size": 77,
+              "type": "file"
+            },
+            {
+              "name": "printer.rs",
+              "path": ".\\src\\output\\printer.rs",
+              "size": 16325,
+              "type": "file"
+            },
+            {
+              "name": "terminal.rs",
+              "path": ".\\src\\output\\terminal.rs",
+              "size": 4287,
+              "type": "file"
+            }
+          ],
+          "name": "output",
+          "path": ".\\src\\output",
+          "type": "directory"
+        },
+        {
+          "name": "prelude.rs",
+          "path": ".\\src\\prelude.rs",
+          "size": 83,
+          "type": "file"
+        }
+      ],
+      "name": "src",
+      "path": ".\\src",
+      "type": "directory"
+    },
+    {
+      "name": "structure.json",
+      "path": ".\\structure.json",
+      "size": 0,
+      "type": "file"
+    },
+    {
+      "name": "test_output.txt",
+      "path": ".\\test_output.txt",
+      "size": 461,
+      "type": "file"
+    },
+    {
+      "name": "tree.txt",
+      "path": ".\\tree.txt",
+      "size": 11824,
+      "type": "file"
+    }
+  ],
+  "name": ".",
+  "path": ".",
+  "type": "directory"
+}
