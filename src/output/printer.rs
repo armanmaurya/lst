@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 use std::io::Write;
 use std::path::{Path, PathBuf};
-use walkdir::DirEntry;
+use walkdir::{DirEntry, WalkDir};
 
 use super::formatter::{
     format_directory_name, format_file_name, format_file_size, 
@@ -10,6 +10,7 @@ use super::formatter::{
 use super::terminal::CharacterSet;
 use crate::core::search::{build_search_filter, should_print_entry};
 use crate::core::tree::collect_entries;
+use crate::core::filters::should_show_entry;
 use crate::error::Result;
 
 /// Configuration for tree printing
@@ -62,7 +63,8 @@ impl TreeWriter {
     pub fn write_to_terminal(&self, config: &TreeConfig) -> Result<()> {
         let stdout = std::io::stdout();
         let mut handle = stdout.lock();
-        self.write(&mut handle, config)
+        // Default to streaming output for better responsiveness
+        self.write_streaming(&mut handle, config)
     }
 }
 
@@ -132,4 +134,85 @@ pub fn print_tree<W: Write>(
     }
     
     Ok(())
+}
+
+/// Stream the directory tree while scanning, printing entries incrementally
+impl TreeWriter {
+    fn write_streaming<W: Write>(&self, writer: &mut W, config: &TreeConfig) -> Result<()> {
+        // Use ASCII for file output (no color), Unicode for terminal if supported
+        let charset = if self.use_color { CharacterSet::detect() } else { CharacterSet::Ascii };
+        let formatter = TreeFormatter::with_charset(charset);
+
+        let mut iter = WalkDir::new(config.path)
+            .min_depth(1)
+            .max_depth(config.max_depth)
+            .into_iter()
+            .filter_entry(|e| should_show_entry(e, config.show_all))
+            .peekable();
+
+        // Track ancestor continuation states per depth
+        let mut ancestor_has_more: Vec<bool> = Vec::new();
+
+        // Precompute search visibility helper
+        // We need show_dirs for search to print parents; compute lazily when needed
+        let show_dirs = if let Some(pattern) = config.search_pattern {
+            let entries = collect_entries(config.path, config.max_depth, config.show_all);
+            build_search_filter(&entries, pattern)
+        } else {
+            std::collections::HashSet::new()
+        };
+
+        while let Some(res) = iter.next() {
+            let entry = match res {
+                Ok(e) => e,
+                Err(_) => continue,
+            };
+
+            if !should_print_entry(&entry, config.search_pattern, &show_dirs) {
+                continue;
+            }
+
+            let depth = entry.depth();
+
+            // Determine next depth to infer last-child state at current depth
+            let next_depth = iter.peek().and_then(|r| r.as_ref().ok()).map(|e| e.depth());
+
+            // Adjust ancestor stack when depth decreases
+            let current_stack_len = ancestor_has_more.len();
+            if depth < current_stack_len {
+                ancestor_has_more.truncate(depth);
+            } else if depth > current_stack_len {
+                // Extend stack for deeper levels; assume ancestors have more until proven otherwise
+                ancestor_has_more.resize(depth, true);
+            }
+
+            // Compute is_last flags slice for formatter
+            let mut is_last: Vec<bool> = vec![false; depth];
+            // Ancestors: if ancestor_has_more[i] is false, it's last at that level
+            for i in 0..depth.saturating_sub(1) {
+                is_last[i] = !ancestor_has_more.get(i).copied().unwrap_or(false);
+            }
+
+            // Current level last-child: if next entry is at shallower depth, this is last
+            let current_is_last = match next_depth {
+                Some(nd) => nd < depth,
+                None => true,
+            };
+            if depth > 0 {
+                is_last[depth - 1] = current_is_last;
+            }
+
+            // Update ancestor_has_more for current level based on peek
+            if depth > 0 {
+                let idx = depth - 1;
+                ancestor_has_more.resize(depth, true);
+                ancestor_has_more[idx] = !current_is_last;
+            }
+
+            let indent = formatter.generate_indent(depth, &is_last);
+            print_entry_line(writer, &entry, &indent, self.use_color)?;
+        }
+
+        Ok(())
+    }
 }
