@@ -16,7 +16,7 @@ pub struct Cli {
     pub all: bool,
 
     /// Max depth of traversal (0 for unlimited)
-    #[arg(short, long, global = true, default_value_t = 0)]
+    #[arg(short, long, global = true, default_value_t = 1)]
     pub depth: usize,
 
     /// Export tree to a file (plain text, no color)
